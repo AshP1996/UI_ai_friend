@@ -1,0 +1,495 @@
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+  position: relative;
+}
+
+.floating-emojis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  margin-top: -150px;
+  pointer-events: none;
+}
+
+.floating-emoji {
+  position: absolute;
+  font-size: 32px;
+  animation: floatUp 2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-40px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.8);
+  }
+}
+
+.avatar-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+
+.avatar-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+  animation: glowPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.avatar.happy .avatar-glow { background: #3cff8f; }
+.avatar.sad .avatar-glow { background: #6b9eff; }
+.avatar.angry .avatar-glow { background: #ff4d4d; }
+.avatar.surprised .avatar-glow { background: #ffcc66; }
+.avatar.excited .avatar-glow { background: #ff6bff; }
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.avatar {
+  width: 280px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  filter: drop-shadow(0 0 40px rgba(77,232,255,0.8));
+  transition: transform 0.3s ease;
+}
+
+.avatar.jump { animation: avatarJump 0.6s ease-out; }
+.avatar.spin { animation: avatarSpin 1s ease-in-out; }
+.avatar.shake { animation: avatarShake 0.3s infinite; }
+.avatar.bounce { animation: avatarBounce 0.5s infinite; }
+.avatar.slouch { transform: scaleY(0.85) translateY(15px); }
+.avatar.tilt { animation: avatarTilt 0.4s ease-out; }
+.avatar.float { animation: avatarFloat 3s ease-in-out infinite; }
+
+@keyframes avatarJump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-60px) scale(1.05); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes avatarSpin {
+  0% { transform: rotateZ(0) scale(1); }
+  50% { transform: rotateZ(180deg) scale(1.1); }
+  100% { transform: rotateZ(360deg) scale(1); }
+}
+
+@keyframes avatarShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-2deg); }
+  75% { transform: translateX(8px) rotate(2deg); }
+}
+
+@keyframes avatarBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.08); }
+}
+
+@keyframes avatarTilt {
+  0% { transform: rotateZ(0); }
+  50% { transform: rotateZ(-10deg); }
+  100% { transform: rotateZ(0); }
+}
+
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+.emotion-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 25px;
+  background: rgba(77,232,255,0.15);
+  border: 2px solid #4de8ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #4de8ff;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(77,232,255,0.3);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(77,232,255,0.3); }
+  50% { box-shadow: 0 0 30px rgba(77,232,255,0.6); }
+}
+
+.intensity-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: #4de8ff;
+  opacity: 0.7;
+}
+
+.intensity-bar {
+  width: 120px;
+  height: 6px;
+  background: rgba(77,232,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(77,232,255,0.3);
+}
+
+.intensity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4de8ff, #72f3ff, #3cff8f);
+  box-shadow: 0 0 12px #4de8ff;
+  animation: intensityPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes intensityPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.head {
+  width: 180px;
+  height: 140px;
+  margin: auto;
+  position: relative;
+  border-radius: 28px;
+  border: 3px solid #4de8ff;
+  background: linear-gradient(180deg, rgba(45,95,140,0.6), rgba(10,25,50,0.8));
+  animation: headFloat 5s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 30px rgba(77,232,255,0.2), 0 0 30px rgba(77,232,255,0.3);
+  transition: all 0.3s ease;
+}
+
+.avatar.happy .head { border-color: #3cff8f; box-shadow: inset 0 0 30px rgba(60,255,143,0.2), 0 0 30px rgba(60,255,143,0.4); }
+.avatar.sad .head { border-color: #6b9eff; box-shadow: inset 0 0 30px rgba(107,158,255,0.2), 0 0 30px rgba(107,158,255,0.3); }
+.avatar.angry .head { border-color: #ff4d4d; box-shadow: inset 0 0 30px rgba(255,77,77,0.2), 0 0 30px rgba(255,77,77,0.4); }
+.avatar.surprised .head { border-color: #ffcc66; box-shadow: inset 0 0 30px rgba(255,204,102,0.2), 0 0 30px rgba(255,204,102,0.4); }
+.avatar.excited .head { border-color: #ff6bff; box-shadow: inset 0 0 30px rgba(255,107,255,0.2), 0 0 30px rgba(255,107,255,0.4); }
+
+.eye {
+  position: absolute;
+  top: 55px;
+  width: 28px;
+  height: 8px;
+  background: #4de8ff;
+  border-radius: 8px;
+  animation: blink 5s infinite;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px #4de8ff;
+}
+
+.eye.left { left: 38px; }
+.eye.right { right: 38px; }
+
+.avatar.happy .eye { border-radius: 50% 50% 0 0; height: 14px; background: #3cff8f; box-shadow: 0 0 12px #3cff8f; }
+.avatar.sad .eye { height: 4px; opacity: 0.6; }
+.avatar.angry .eye { height: 5px; transform: rotate(-15deg); }
+.avatar.surprised .eye { height: 18px; border-radius: 50%; top: 48px; }
+.avatar.excited .eye { animation: excitedEye 0.3s infinite alternate; }
+
+@keyframes excitedEye {
+  from { transform: scaleX(1) scaleY(1); }
+  to { transform: scaleX(1.2) scaleY(1.3); }
+}
+
+.eyebrow {
+  position: absolute;
+  top: 40px;
+  width: 32px;
+  height: 4px;
+  background: #4de8ff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px rgba(77,232,255,0.6);
+}
+
+.eyebrow.left { left: 34px; }
+.eyebrow.right { right: 34px; }
+
+.avatar.angry .eyebrow.left { transform: rotate(-25deg); }
+.avatar.angry .eyebrow.right { transform: rotate(25deg); }
+.avatar.sad .eyebrow { top: 36px; transform: rotate(20deg); }
+.avatar.surprised .eyebrow { top: 32px; transform: scaleX(1.3) scaleY(1.2); }
+
+.mouth {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 6px;
+  background: #4de8ff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(77,232,255,0.6);
+}
+
+.avatar.happy .mouth { width: 50px; height: 26px; border-radius: 0 0 26px 26px; background: #3cff8f; box-shadow: 0 0 12px #3cff8f; }
+.avatar.sad .mouth { width: 36px; height: 20px; border-radius: 20px 20px 0 0; background: #6b9eff; box-shadow: 0 0 10px #6b9eff; bottom: 24px; }
+.avatar.angry .mouth { width: 44px; height: 7px; background: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
+.avatar.surprised .mouth { width: 30px; height: 30px; border-radius: 50%; bottom: 26px; background: #ffcc66; box-shadow: 0 0 12px #ffcc66; }
+.avatar.excited .mouth { width: 50px; height: 20px; border-radius: 0 0 20px 20px; background: #ff6bff; box-shadow: 0 0 12px #ff6bff; animation: excitedMouth 0.2s infinite alternate; }
+
+@keyframes excitedMouth {
+  from { height: 20px; }
+  to { height: 26px; }
+}
+
+.audio-line {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  height: 24px;
+  margin: 16px 0;
+}
+
+.audio-line span {
+  width: 5px;
+  height: 8px;
+  background: #4de8ff;
+  border-radius: 5px;
+  opacity: 0.4;
+  box-shadow: 0 0 8px rgba(77,232,255,0.5);
+}
+
+.avatar.listening .audio-line span {
+  animation: audioWave 0.5s infinite ease-in-out;
+  opacity: 1;
+  background: #ffcc66;
+  box-shadow: 0 0 10px #ffcc66;
+}
+
+.audio-line span:nth-child(1) { animation-delay: 0s; }
+.audio-line span:nth-child(2) { animation-delay: 0.1s; }
+.audio-line span:nth-child(3) { animation-delay: 0.2s; }
+.audio-line span:nth-child(4) { animation-delay: 0.3s; }
+.audio-line span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes audioWave {
+  0%, 100% { height: 8px; }
+  50% { height: 22px; }
+}
+
+.body {
+  width: 160px;
+  height: 180px;
+  margin: 12px auto;
+  position: relative;
+  border-radius: 28px;
+  border: 3px solid #4de8ff;
+  background: linear-gradient(180deg, rgba(20,55,85,0.5), rgba(8,20,40,0.8));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 30px rgba(77,232,255,0.15), 0 0 25px rgba(77,232,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.avatar.happy .body { border-color: #3cff8f; box-shadow: inset 0 0 30px rgba(60,255,143,0.15), 0 0 25px rgba(60,255,143,0.2); }
+.avatar.sad .body { border-color: #6b9eff; box-shadow: inset 0 0 30px rgba(107,158,255,0.15), 0 0 25px rgba(107,158,255,0.2); opacity: 0.85; }
+.avatar.angry .body { border-color: #ff4d4d; box-shadow: inset 0 0 30px rgba(255,77,77,0.15), 0 0 25px rgba(255,77,77,0.2); }
+
+.core {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #7df9ff, #4de8ff);
+  box-shadow: 0 0 30px #4de8ff, inset 0 0 20px rgba(255,255,255,0.3);
+  animation: corePulse 1.5s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes corePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.avatar.listening .core { background: radial-gradient(circle, #fff4a3, #ffcc66); box-shadow: 0 0 40px #ffcc66, inset 0 0 20px rgba(255,255,255,0.4); animation: coreBeat 0.5s ease-in-out infinite; }
+.avatar.happy .core { background: radial-gradient(circle, #9dffbf, #3cff8f); box-shadow: 0 0 40px #3cff8f, inset 0 0 20px rgba(255,255,255,0.3); animation: coreHappy 0.6s ease-in-out infinite; }
+.avatar.sad .core { background: radial-gradient(circle, #b3d9ff, #6b9eff); box-shadow: 0 0 25px #6b9eff; animation: none; }
+.avatar.angry .core { background: radial-gradient(circle, #ff7a7a, #ff4d4d); box-shadow: 0 0 40px #ff4d4d; animation: coreIntense 0.2s infinite; }
+.avatar.surprised .core { background: radial-gradient(circle, #fff4a3, #ffcc66); box-shadow: 0 0 40px #ffcc66; animation: coreSurprise 0.4s ease-out; }
+.avatar.excited .core { background: radial-gradient(circle, #ffb3ff, #ff6bff); box-shadow: 0 0 40px #ff6bff; animation: coreExcited 0.3s ease-in-out infinite; }
+
+@keyframes coreBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+@keyframes coreHappy { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.4); } }
+@keyframes coreIntense { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+@keyframes coreSurprise { 0% { transform: scale(0.5); } 100% { transform: scale(1.5); } }
+@keyframes coreExcited { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.3) rotate(10deg); } }
+
+.hand {
+  position: absolute;
+  top: 30px;
+  width: 26px;
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #53adbb, #4a95a0);
+  box-shadow: 0 0 18px rgba(77,232,255,0.6);
+  transform-origin: top center;
+  transition: all 0.3s ease;
+}
+
+.left-hand { left: -50px; }
+.right-hand { right: -50px; }
+
+.avatar.happy .hand { animation: happyHands 0.8s ease-in-out infinite; }
+.avatar.sad .hand { transform: rotate(25deg); opacity: 0.5; }
+.avatar.angry .hand { animation: angryHands 0.2s ease-in-out infinite; }
+.avatar.excited .hand { animation: excitedHands 0.35s ease-in-out infinite; }
+
+@keyframes happyHands { 0%, 100% { transform: rotate(-15deg) translateY(0); } 50% { transform: rotate(15deg) translateY(-15px); } }
+@keyframes angryHands { 0%, 100% { transform: translateX(0) rotate(0); } 50% { transform: translateX(-6px) rotate(-12deg); } }
+@keyframes excitedHands { 0%, 100% { transform: rotate(-35deg) translateY(0) scale(1.1); } 50% { transform: rotate(35deg) translateY(-20px) scale(1.15); } }
+
+@keyframes headFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes blink {
+  0%, 96%, 100% { opacity: 1; }
+  97%, 99% { opacity: 0.1; }
+}
+
+.avatar-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.control-btn {
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.talk-btn {
+  background: linear-gradient(135deg, #4de8ff, #72f3ff);
+  color: #001018;
+  grid-column: span 2;
+  box-shadow: 0 4px 20px rgba(77,232,255,0.5);
+}
+
+.talk-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(77,232,255,0.7); }
+
+.stop-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ff9b9b);
+  color: white;
+  grid-column: span 2;
+  box-shadow: 0 4px 20px rgba(255,107,107,0.5);
+}
+
+.anim-btn {
+  background: rgba(77,232,255,0.15);
+  color: #4de8ff;
+  border: 2px solid rgba(77,232,255,0.4);
+  box-shadow: 0 0 12px rgba(77,232,255,0.2);
+}
+
+.anim-btn:hover { background: rgba(77,232,255,0.25); box-shadow: 0 0 18px rgba(77,232,255,0.4); }
+
+.emotion-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 10px;
+  margin-top: 12px;
+}
+
+.emotion-btn {
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid rgba(77,232,255,0.3);
+  background: rgba(77,232,255,0.08);
+  color: #e6faff;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.emotion-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(77,232,255,0.18);
+  box-shadow: 0 6px 20px rgba(77,232,255,0.3);
+}
+
+.emotion-btn .emoji { font-size: 22px; }
+
+.personality-display {
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(8,20,35,0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(77,232,255,0.2);
+  font-size: 10px;
+}
+
+.personality-trait {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  color: #e6faff;
+  opacity: 0.8;
+  align-items: center;
+}
+
+.trait-bar {
+  width: 80px;
+  height: 4px;
+  background: rgba(77,232,255,0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-left: 8px;
+}
+
+.trait-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4de8ff, #3cff8f);
+  box-shadow: 0 0 8px #4de8ff;
+}

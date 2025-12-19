@@ -1,0 +1,12 @@
+.analytics {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+}
+
+.stat {
+  background: rgba(77,232,255,0.12);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
