@@ -1,19 +1,30 @@
-import MainLayout from "../components/Layout/MainLayout";
-import ChatWindow from "../components/Chat/Chat";
-import { useChat } from "../hooks/useChat";
-
+import { useState, useRef } from "react";
+import Avatar from "../components/Avatar/Avatar";
+import Chat from "../components/Chat/Chat";
+import "./ChatPage.css";
 
 export default function ChatPage() {
-const { messages, send, loading } = useChat();
+  const [emotion, setEmotion] = useState("idle");
+  const voiceMessageHandler = useRef(null);
 
+  return (
+    <div className="chat-page">
+      <div className="main-card">
+        <div className="avatar-card">
+          <Avatar 
+            emotion={emotion} 
+            onEmotionChange={setEmotion}
+            onVoiceMessage={voiceMessageHandler}
+          />
+        </div>
 
-return (
-<MainLayout thinking={loading}>
-<ChatWindow messages={messages} />
-<input
-placeholder="Talk to your AI friend..."
-onKeyDown={(e) => e.key === "Enter" && send(e.target.value)}
-/>
-</MainLayout>
-);
+        <div className="chat-card">
+          <Chat 
+            setEmotion={setEmotion}
+            onVoiceMessage={voiceMessageHandler}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }

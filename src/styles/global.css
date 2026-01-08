@@ -11,10 +11,54 @@ html, body, #root {
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: radial-gradient(circle at top, #0f1f38, #02050c 65%);
   color: #e6faff;
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+.app-container {
+  min-height: 100vh;
+}
+
+/* ===============================
+   LOADING SCREENS
+================================ */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 20px;
+  background: radial-gradient(circle at top, #0f1f38, #02050c 65%);
+}
+
+.loading-spinner {
+  display: flex;
+  gap: 8px;
+}
+
+.spinner-ring {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4de8ff;
+  animation: spinnerBounce 1.4s ease-in-out infinite both;
+}
+
+.spinner-ring:nth-child(1) { animation-delay: -0.32s; }
+.spinner-ring:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes spinnerBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ===============================

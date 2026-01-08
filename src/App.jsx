@@ -1,95 +1,43 @@
-
-// import { useState } from "react";
-// import Avatar from "./components/Avatar/Avatar";
-// import Chat from "./components/Chat/Chat";
-// import Login from "./components/Auth/Login";
-// import Register from "./components/Auth/Register";
-// import Logout from "./components/Auth/Logout";
-
-// export default function App() {
-//   const [emotion, setEmotion] = useState("idle");
-//   const [authMode, setAuthMode] = useState("login");
-//   const [isAuth, setIsAuth] = useState(
-//     !!localStorage.getItem("access_token")
-//   );
-
-//   if (!isAuth) {
-//     return authMode === "login" ? (
-//       <Login
-//         onSuccess={() => setIsAuth(true)}
-//         switchToRegister={() => setAuthMode("register")}
-//       />
-//     ) : (
-//       <Register
-//         onSuccess={() => setIsAuth(true)}
-//         switchToLogin={() => setAuthMode("login")}
-//       />
-//     );
-//   }
-
-//   return (
-//     <div className="screen">
-//       <Logout onLogout={() => setIsAuth(false)} />
-
-//       <div className="main-card">
-//         <div className="avatar-card">
-//           <Avatar emotion={emotion} />
-//         </div>
-
-//         <div className="chat-card">
-//           <Chat setEmotion={setEmotion} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-import { useState } from "react";
-import Avatar from "./components/Avatar/Avatar";
-import Chat from "./components/Chat/Chat";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
-import Logout from "./components/Auth/Logout";
+import Dashboard from "./pages/Dashboard";
+import ChatPage from "./pages/ChatPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import "./styles/global.css";
 
-// Auth bypass toggle from environment variable
-const BYPASS_AUTH = import.meta.env.VITE_BYPASS_AUTH === "true";
-
-export default function App() {
-  const [emotion, setEmotion] = useState("idle");
-  const [authMode, setAuthMode] = useState("login");
-  const [isAuth, setIsAuth] = useState(
-    BYPASS_AUTH || !!localStorage.getItem("access_token")
-  );
-
-  // TEMP: skip login/register if auth is bypassed
-  if (!isAuth && !BYPASS_AUTH) {
-    return authMode === "login" ? (
-      <Login
-        onSuccess={() => setIsAuth(true)}
-        switchToRegister={() => setAuthMode("register")}
-      />
-    ) : (
-      <Register
-        onSuccess={() => setIsAuth(true)}
-        switchToLogin={() => setAuthMode("login")}
-      />
-    );
-  }
-
+function App() {
   return (
-    <div className="screen">
-      {/* Show Logout only if auth is enabled */}
-      {!BYPASS_AUTH && <Logout onLogout={() => setIsAuth(false)} />}
-
-      <div className="main-card">
-        <div className="avatar-card">
-          <Avatar emotion={emotion} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <div className="app-container">
+                  <Navigation />
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/analytics" element={<AnalyticsPage />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
         </div>
-
-        <div className="chat-card">
-          <Chat setEmotion={setEmotion} />
-        </div>
-      </div>
-    </div>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
+
+export default App;

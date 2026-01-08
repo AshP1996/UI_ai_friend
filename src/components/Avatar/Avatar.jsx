@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { setExpression, playAnimation, getPersona } from "../../api/avatar";
-import { connectVoiceStream, stopVoiceStream, textToSpeech } from "../../api/voice";
+import { useVoiceStream, stopVoiceStream } from "../../api/voice";
 import mapEmotion from "../../hooks/useEmotionMapper";
 import "./avatar.css";
 
-const Avatar = ({ emotion: externalEmotion, onEmotionChange }) => {
+const Avatar = ({ emotion: externalEmotion, onEmotionChange, onVoiceMessage }) => {
   const [emotion, setEmotion] = useState("idle");
   const [intensity, setIntensity] = useState(0.6);
   const [listening, setListening] = useState(false);
@@ -47,15 +47,40 @@ const Avatar = ({ emotion: externalEmotion, onEmotionChange }) => {
   ========================== */
   const triggerEmotionEffect = (em) => {
     const emojiMap = {
+      // Positive emotions
       happy: "😄",
+      excited: "🤩",
+      joyful: "🎉",
+      love: "❤️",
+      grateful: "🙏",
+      proud: "💪",
+      playful: "🎮",
+      encouraging: "👍",
+      
+      // Negative emotions
       sad: "😢",
       angry: "😠",
-      surprised: "😲",
+      frustrated: "😤",
+      disappointed: "😞",
+      worried: "😟",
+      apologetic: "😔",
+      
+      // Neutral/Thinking
       neutral: "😐",
-      excited: "🤩",
       thinking: "🤔",
+      confused: "😕",
+      curious: "🤨",
+      calm: "😌",
+      
+      // Surprise
+      surprised: "😲",
+      shocked: "😱",
+      amazed: "🤯",
+      
+      // Communication
       listening: "🎤",
-      talking: "🗣️"
+      talking: "🗣️",
+      empathetic: "💙"
     };
 
     const emoji = emojiMap[em] || "💭";
@@ -96,35 +121,47 @@ const Avatar = ({ emotion: externalEmotion, onEmotionChange }) => {
       onEmotionChange?.("listening");
       triggerEmotionEffect("listening");
 
-      wsRef.current = await connectVoiceStream({
+      await useVoiceStream({
+        userId: "guest",
+
         onPartial: (text) => {
           setPartialText(text);
           setEmotion("listening");
         },
 
         onFinal: async (finalText) => {
-          console.log("🎤 User said:", finalText);
-
+          console.log("🎤 User spoke:", finalText);
           setPartialText("");
-          setEmotion("thinking");
-          triggerEmotionEffect("thinking");
+          
+          if (finalText && finalText.trim()) {
+            setEmotion("thinking");
+            triggerEmotionEffect("thinking");
+            
+            // Send voice message to Chat component
+            if (onVoiceMessage?.current) {
+              await onVoiceMessage.current(finalText.trim());
+            }
+          }
+        },
 
-          // 🔹 TEMP AI RESPONSE (replace with LLM later)
-          const aiReply = "I heard you clearly.";
+        onStatus: (status) => {
+          if (status === "speaking") {
+            setEmotion("talking");
+            triggerEmotionEffect("talking");
+          } else if (status === "listening") {
+            setEmotion("listening");
+          }
+        },
 
+        onAudio: () => {
           setEmotion("talking");
           triggerEmotionEffect("talking");
 
-          await textToSpeech(aiReply, "happy");
-
-          setEmotion("idle");
-          onEmotionChange?.("idle");
-        },
-
-        onStatus: (state) => {
-          if (state === "listening") {
-            setEmotion("listening");
-          }
+          // duration fallback
+          setTimeout(() => {
+            setEmotion("idle");
+            onEmotionChange?.("idle");
+          }, 1200);
         },
 
         onError: (err) => {
@@ -132,12 +169,12 @@ const Avatar = ({ emotion: externalEmotion, onEmotionChange }) => {
           stopListening();
         }
       });
-
     } catch (err) {
       console.error("Failed to start listening:", err);
       stopListening();
     }
-  };
+  };  
+
 
   /* =========================
      MANUAL EXPRESSION
@@ -172,15 +209,42 @@ const Avatar = ({ emotion: externalEmotion, onEmotionChange }) => {
   ];
 
   const getGesture = () => {
+    // Expanded gesture map with more options
     const gestureMap = {
-      happy: "jump",
+      // Positive gestures
+      happy: "wave",
       excited: "spin",
-      angry: "shake",
+      joyful: "jump",
+      love: "heart",
+      grateful: "bow",
+      proud: "chest",
+      playful: "dance",
+      encouraging: "thumbs-up",
+      
+      // Negative gestures
       sad: "slouch",
-      surprised: "bounce",
+      angry: "shake",
+      frustrated: "shake",
+      disappointed: "slouch",
+      worried: "fidget",
+      apologetic: "bow",
+      
+      // Neutral/Thinking gestures
+      neutral: "idle",
       thinking: "tilt",
+      confused: "tilt",
+      curious: "lean-forward",
+      calm: "breathe",
+      
+      // Surprise gestures
+      surprised: "bounce",
+      shocked: "jump",
+      amazed: "bounce",
+      
+      // Communication gestures
       listening: "pulse",
-      talking: "talk"
+      talking: "talk",
+      empathetic: "nod"
     };
     return gestureMap[emotion] || "float";
   };

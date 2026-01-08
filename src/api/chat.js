@@ -24,7 +24,8 @@ export const sendMessage = async (message) => {
 
 // Stream message for real-time response
 export const streamMessage = async (message, onChunk) => {
-  const url = `http://127.0.0.1:8000/api/chat/stream?message=${encodeURIComponent(message)}`;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000/api";
+  const url = `${API_BASE_URL}/chat/stream?message=${encodeURIComponent(message)}`;
   const response = await fetch(url);
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -75,10 +76,11 @@ export const clearChat = async () => {
 export const connectChatWS = (onMessage, onError) => {
   const user = getCurrentUser();
   const BYPASS_AUTH = import.meta.env.VITE_BYPASS_AUTH === "true";
+  const WS_BASE_URL = "ws://127.0.0.1:8000/api";
 
   const url = BYPASS_AUTH
-    ? `ws://127.0.0.1:8000/api/chat/ws/${user.id}`
-    : `ws://127.0.0.1:8000/api/chat/ws/${user.id}?token=${localStorage.getItem("access_token")}`;
+    ? `${WS_BASE_URL}/chat/ws/${user.id}`
+    : `${WS_BASE_URL}/chat/ws/${user.id}?token=${localStorage.getItem("access_token")}`;
 
   const ws = new WebSocket(url);
 

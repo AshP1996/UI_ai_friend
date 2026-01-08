@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { sendMessage, streamMessage, getChatHistory, clearChat } from "../../api/chat";
 import { setExpression, playAnimation } from "../../api/avatar";
-import { textToSpeech } from "../../api/voice";
+import { textToSpeech, getVoiceSocket } from "../../api/voice";
 import mapEmotion from "../../hooks/useEmotionMapper";
 import "./chat.css";
 
-const Chat = ({ setEmotion }) => {
+const Chat = ({ setEmotion, onVoiceMessage }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [aiTyping, setAiTyping] = useState(false);
@@ -137,19 +137,30 @@ const Chat = ({ setEmotion }) => {
       // Send message to API
       const response = await sendMessage(text);
 
-      // Update emotion in avatar
+      // Update emotion in avatar with reactive gestures
       if (response.emotion.primaryEmotion) {
-        const emotionData = mapEmotion(response.emotion.primaryEmotion);
+        const emotionData = mapEmotion(
+          response.emotion.primaryEmotion, 
+          response.emotion.confidence || 0.5,
+          response.emotion.intensity || "medium"
+        );
         setEmotion(emotionData.emotion);
         
-        // Set avatar expression
-        await setExpression(emotionData.emotion, response.emotion.confidence);
+        // Set avatar expression with intensity
+        await setExpression(emotionData.emotion, emotionData.intensity);
         
-        // Play animation
+        // Play primary gesture animation
         await playAnimation(emotionData.gesture);
+        
+        // Play secondary gesture after a short delay for more expressiveness
+        if (emotionData.secondaryGesture) {
+          setTimeout(async () => {
+            await playAnimation(emotionData.secondaryGesture);
+          }, 800);
+        }
       }
 
-      // Add AI response
+      // Add AI response immediately (don't wait for TTS)
       setMessages(prev => [...prev, {
         role: "ai",
         text: response.response,
@@ -167,7 +178,42 @@ const Chat = ({ setEmotion }) => {
         avgProcessingTime: response.processingTime
       }));
 
-      setTimeout(() => setEmotion("idle"), 2500);
+      // Always play TTS audio for voice-initiated messages
+      // Start TTS immediately in parallel (don't await) to reduce latency
+      if (isVoiceMessageRef.current && response.response) {
+        console.log("🎤 Voice message response, requesting TTS immediately:", response.response);
+        
+        // Set emotion to talking immediately
+        setEmotion("talking");
+        
+        // Pass emotion from response to TTS for better voice expression
+        const emotionForTTS = response.emotion?.primaryEmotion || "happy";
+        
+        // Start TTS in parallel (fire and forget) to reduce latency
+        // Don't await - let it play while UI updates
+        textToSpeech(
+          response.response,
+          (status) => {
+            if (status === "speaking") {
+              setEmotion("talking");
+            } else if (status === "idle") {
+              // Keep talking state a bit longer, then return to idle
+              setTimeout(() => setEmotion("idle"), 300);
+            }
+          },
+          () => {
+            // Audio started playing - sync with text display
+            console.log("🎤 TTS audio started playing - synced with text");
+          },
+          emotionForTTS // Pass emotion to TTS
+        ).catch(err => {
+          console.error("🎤 TTS error:", err);
+          setEmotion("idle");
+        });
+      } else {
+        // For non-voice messages, still set emotion but no TTS
+        setTimeout(() => setEmotion("idle"), 2500);
+      }
     } catch (err) {
       console.error("Send error:", err);
       setMessages(prev => [...prev, {
@@ -182,6 +228,21 @@ const Chat = ({ setEmotion }) => {
       isSendingRef.current = false;
     }
   };
+
+  // Track if this is a voice-initiated message (to trigger TTS)
+  const isVoiceMessageRef = useRef(false);
+
+  // Expose handleVoiceMessage to parent via ref
+  useEffect(() => {
+    if (onVoiceMessage) {
+      onVoiceMessage.current = async (voiceText) => {
+        if (!voiceText || !voiceText.trim() || isSendingRef.current) return;
+        isVoiceMessageRef.current = true; // Mark as voice message
+        await handleSendRegular(voiceText.trim());
+        isVoiceMessageRef.current = false; // Reset after processing
+      };
+    }
+  }, [onVoiceMessage]);
 
   const handleSend = () => {
     if (streamMode) {

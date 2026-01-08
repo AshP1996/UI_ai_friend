@@ -121,6 +121,139 @@
   50% { transform: translateY(-15px); }
 }
 
+/* New Expressive Gesture Animations */
+.avatar.wave { animation: avatarWave 0.8s ease-in-out; }
+.avatar.clap { animation: avatarClap 0.4s ease-in-out 3; }
+.avatar.dance { animation: avatarDance 1.2s ease-in-out; }
+.avatar.heart { animation: avatarHeart 1s ease-in-out; }
+.avatar.bow { animation: avatarBow 0.8s ease-out; }
+.avatar.chest { animation: avatarChest 0.6s ease-out; }
+.avatar.sigh { animation: avatarSigh 1s ease-out; }
+.avatar.head-down { animation: avatarHeadDown 0.5s ease-out; }
+.avatar.fist { animation: avatarFist 0.3s ease-out 2; }
+.avatar.chin-rub { animation: avatarChinRub 1s ease-in-out; }
+.avatar.head-scratch { animation: avatarHeadScratch 0.6s ease-in-out 2; }
+.avatar.lean-forward { animation: avatarLeanForward 0.5s ease-out; }
+.avatar.breathe { animation: avatarBreathe 2s ease-in-out infinite; }
+.avatar.fidget { animation: avatarFidget 0.4s ease-in-out infinite; }
+.avatar.hand-gesture { animation: avatarHandGesture 0.6s ease-in-out infinite; }
+.avatar.nod { animation: avatarNod 0.3s ease-in-out 3; }
+.avatar.hand-on-heart { animation: avatarHandOnHeart 1s ease-out; }
+.avatar.thumbs-up { animation: avatarThumbsUp 0.6s ease-out; }
+.avatar.talk { animation: avatarTalk 0.3s ease-in-out infinite; }
+.avatar.pulse { animation: avatarPulse 1s ease-in-out infinite; }
+
+@keyframes avatarWave {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-5px) rotate(-10deg); }
+  50% { transform: translateY(-10px) rotate(10deg); }
+  75% { transform: translateY(-5px) rotate(-5deg); }
+}
+
+@keyframes avatarClap {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes avatarDance {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(-10deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+  75% { transform: translateY(-15px) rotate(-5deg); }
+}
+
+@keyframes avatarHeart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes avatarBow {
+  0% { transform: translateY(0) rotateX(0deg); }
+  50% { transform: translateY(10px) rotateX(15deg); }
+  100% { transform: translateY(0) rotateX(0deg); }
+}
+
+@keyframes avatarChest {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.05); }
+}
+
+@keyframes avatarSigh {
+  0% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(5px) scaleY(0.95); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+
+@keyframes avatarHeadDown {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(8px) rotate(5deg); }
+}
+
+@keyframes avatarFist {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
+}
+
+@keyframes avatarChinRub {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(5px) rotate(10deg); }
+}
+
+@keyframes avatarHeadScratch {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(15deg); }
+}
+
+@keyframes avatarLeanForward {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-5px) translateX(5px); }
+}
+
+@keyframes avatarBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes avatarFidget {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-3px) rotate(-2deg); }
+  50% { transform: translateX(3px) rotate(2deg); }
+  75% { transform: translateX(-2px) rotate(-1deg); }
+}
+
+@keyframes avatarHandGesture {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(15deg) translateY(-5px); }
+}
+
+@keyframes avatarNod {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(3px) rotate(2deg); }
+}
+
+@keyframes avatarHandOnHeart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes avatarThumbsUp {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes avatarTalk {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.05); }
+}
+
+@keyframes avatarPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.9; }
+}
+
 .emotion-badge {
   display: inline-block;
   padding: 8px 20px;

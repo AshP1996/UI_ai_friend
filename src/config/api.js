@@ -17,5 +17,5 @@ export const API_ENDPOINTS = {
 
   CHAT: `${API_BASE_URL}/chat`,
   HEALTH: `${API_BASE_URL}/health`,
-  WS: `ws://127.0.0.1:8000/ws/chat`,
+  WS: `ws://127.0.0.1:8000/api/chat/ws`,
 };
